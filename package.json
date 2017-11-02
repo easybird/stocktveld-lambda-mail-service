@@ -15,5 +15,8 @@
     "webpack": "^3.3.0"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@sendgrid/mail": "^6.1.4"
+  }
 }

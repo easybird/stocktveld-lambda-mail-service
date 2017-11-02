@@ -1,16 +1,44 @@
+import mailTo from "./mailTo";
+
 // eslint-disable-next-line import/prefer-default-export
 export const hello = (event, context, cb) => {
-  const p = new Promise(resolve => {
-    resolve("success");
+  const p = new Promise((resolve, reject) => {
+    const body = JSON.parse(event.body);
+
+    console.log("body", body);
+
+    mailTo(body)
+      .then(info =>
+        resolve({
+          statusCode: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*" // Required for CORS support to work
+          }
+          // body: JSON.stringify({
+          //   body,
+          //   info
+          // })
+        })
+      )
+      .catch(err =>
+        reject({
+          statusCode: 500,
+          headers: {
+            "Access-Control-Allow-Origin": "*" // Required for CORS support to work
+          },
+          body: JSON.stringify({
+            err
+          })
+        })
+      );
   });
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: "Go Serverless Webpack (Ecma Script) v1.0! Second module!",
-      // event: event,
-      // input: event && event.input,
-      body: event && event.body
+
+  p
+    .then(response => {
+      return cb(null, response);
     })
-  };
-  p.then(() => cb(null, response)).catch(e => cb(e));
+    .catch(e => {
+      console.log("fail", e);
+      return cb(e);
+    });
 };

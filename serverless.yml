@@ -18,3 +18,4 @@ functions:
       - http:
           method: post
           path: second
+          cors: true
